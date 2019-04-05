@@ -104,7 +104,7 @@ CLI_CONTROL( std::string,   SPIRVDis,                               "spirv-dis",
 CLI_CONTROL( std::string,   DefaultOptions,                         "-cc1 -x cl -cl-std=CL1.2 -D__OPENCL_C_VERSION__=120 -D__OPENCL_VERSION__=120 -emit-spirv -triple=spir", "This is the list of options that is implicitly passed to CLANG to build a non-OpenCL 2.0 SPIR-V module.  Any application-provided build options will be appended to these build options." )
 CLI_CONTROL( std::string,   OpenCL2Options,                         "-cc1 -x cl -cl-std=CL2.0 -D__OPENCL_C_VERSION__=200 -D__OPENCL_VERSION__=200 -emit-spirv -triple=spir", "This is the list of options that is implicitly passed to CLANG to build an OpenCL 2.0 SPIR-V module.  Any application-provided build options will be appended to these build options." )
 
-CLI_CONTROL_SEPARATOR( Controls for Dumping Buffers and Images: )
+CLI_CONTROL_SEPARATOR( Controls for Dumping and Injecting Buffers and Images: )
 CLI_CONTROL( bool,          DumpArgumentsOnSet,                     false, "If set to a nonzero value, the Intercept Layer for OpenCL Applications will dump the argument value on calls to clSetKernelArg(). Arguments are dumped as raw binary data.  The filenames will have the form \"SetKernelArg_<Enqueue Number>_Kernel_<Kernel Name>_Arg_<Argument Number>.bin\"." )
 CLI_CONTROL( bool,          DumpBuffersAfterCreate,                 false, "If set, the Intercept Layer for OpenCL Applications will dump buffers to a file after creation.  This control still honors the enqueue counter limits, even though no enqueues are involved during buffer creation.  Currently only works for cl_mem buffers created from host pointers." )
 CLI_CONTROL( bool,          DumpBuffersAfterMap,                    false, "If set, the Intercept Layer for OpenCL Applications will dump the contents of a buffer to a file after the buffer is mapped.  Only valid if the buffer is NOT mapped with CL_MAP_WRITE_INVALIDATE_REGION.  If the buffer was mapped non-blocking, this may insert a clFinish() into the command queue, which may have functional or performance implications." )
@@ -119,6 +119,8 @@ CLI_CONTROL( cl_uint,       DumpBuffersMinEnqueue,                  0,     "The 
 CLI_CONTROL( cl_uint,       DumpBuffersMaxEnqueue,                  UINT_MAX, "The Intercept Layer for OpenCL Applications will only dump buffers when the enqueue counter is less than this value, inclusive." )
 CLI_CONTROL( cl_uint,       DumpImagesMinEnqueue,                   0,     "The Intercept Layer for OpenCL Applications will only dump images when the enqueue counter is greater than this value, inclusive." )
 CLI_CONTROL( cl_uint,       DumpImagesMaxEnqueue,                   UINT_MAX, "The Intercept Layer for OpenCL Applications will only dump images when the enqueue counter is less than this value, inclusive." )
+CLI_CONTROL( bool,          InjectBuffersBeforeEnqueue,             false,  "If set, the Intercept Layer for OpenCL Applications will inject buffers before clEnqueueNDRangeKernel is executed.")
+CLI_CONTROL( bool,          InjectBuffersAfterEnqueue,             false,  "If set, the Intercept Layer for OpenCL Applications will inject buffers after clEnqueueNDRangeKernel is executed.")
 
 CLI_CONTROL_SEPARATOR( AubCapture Controls: )
 CLI_CONTROL( bool,          AubCapture,                             false, "This is the master control for aub capture.  The Intercept Layer for OpenCL Applications doesn't implement aub capture itself, but can be used to selectively enable and disable aub capture via kdc.exe." )

@@ -5014,6 +5014,7 @@ CL_API_ENTRY cl_int CL_API_CALL CLIRN(clEnqueueNDRangeKernel)(
 
         DUMP_BUFFERS_BEFORE_ENQUEUE( kernel, command_queue );
         DUMP_IMAGES_BEFORE_ENQUEUE( kernel, command_queue );
+        INJECT_BUFFERS_BEFORE_ENQUEUE( kernel, command_queue );
         CHECK_AUBCAPTURE_START_KERNEL(
             kernel,
             work_dim,
@@ -5119,6 +5120,7 @@ CL_API_ENTRY cl_int CL_API_CALL CLIRN(clEnqueueNDRangeKernel)(
 
         DUMP_BUFFERS_AFTER_ENQUEUE( kernel, command_queue );
         DUMP_IMAGES_AFTER_ENQUEUE( kernel, command_queue );
+        INJECT_BUFFERS_AFTER_ENQUEUE( kernel, command_queue );
         FINISH_OR_FLUSH_AFTER_ENQUEUE( command_queue );
         CHECK_AUBCAPTURE_STOP( command_queue );
 

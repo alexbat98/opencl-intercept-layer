@@ -420,6 +420,10 @@ public:
                 cl_int arg_index,
                 size_t size,
                 const void *pBuffer );
+    void    injectBuffersForKernel(
+                const std::string& name,
+                cl_kernel kernel,
+                cl_command_queue command_queue );
 
     void    checkEventList(
                 const std::string& functionName,
@@ -1291,7 +1295,8 @@ inline bool CLIntercept::checkDumpImageEnqueueLimits() const
           pIntercept->config().DumpBuffersAfterMap ||                       \
           pIntercept->config().DumpBuffersBeforeUnmap ||                    \
           pIntercept->config().DumpBuffersBeforeEnqueue ||                  \
-          pIntercept->config().DumpBuffersAfterEnqueue ) )                  \
+          pIntercept->config().DumpBuffersAfterEnqueue ||                   \
+          pIntercept->config().InjectBuffersBeforeEnqueue) )                \
     {                                                                       \
         pIntercept->addBuffer( buffer );                                    \
     }
@@ -1312,7 +1317,8 @@ inline bool CLIntercept::checkDumpImageEnqueueLimits() const
           pIntercept->config().DumpBuffersBeforeEnqueue ||                  \
           pIntercept->config().DumpBuffersAfterEnqueue ||                   \
           pIntercept->config().DumpImagesBeforeEnqueue ||                   \
-          pIntercept->config().DumpImagesAfterEnqueue ) )                   \
+          pIntercept->config().DumpImagesAfterEnqueue ||                    \
+          pIntercept->config().InjectBuffersBeforeEnqueue) )                \
     {                                                                       \
         pIntercept->removeMemObj( memobj );                                 \
     }
@@ -1454,6 +1460,22 @@ inline bool CLIntercept::checkDumpImageEnqueueLimits() const
         pIntercept->dumpImagesForKernel( kernel ) )                         \
     {                                                                       \
         pIntercept->dumpImagesForKernel( "Post", kernel, command_queue );   \
+    }
+
+#define INJECT_BUFFERS_BEFORE_ENQUEUE( kernel, command_queue )              \
+    if( /*pIntercept->checkDumpBufferEnqueueLimits() &&  */                 \
+        pIntercept->config().DumpBuffersBeforeEnqueue /*&&*/                \
+        /*pIntercept->dumpBufferForKernel( kernel )*/ )                     \
+    {                                                                       \
+        pIntercept->injectBuffersForKernel( "Pre", kernel, command_queue ); \
+    }
+
+#define INJECT_BUFFERS_AFTER_ENQUEUE( kernel, command_queue )               \
+    if( /*pIntercept->checkDumpBufferEnqueueLimits() &&  */                 \
+        pIntercept->config().DumpBuffersBeforeEnqueue /*&&*/                \
+        /*pIntercept->dumpBufferForKernel( kernel )*/ )                     \
+    {                                                                       \
+        pIntercept->injectBuffersForKernel( "Post", kernel, command_queue );\
     }
 
 ///////////////////////////////////////////////////////////////////////////////
